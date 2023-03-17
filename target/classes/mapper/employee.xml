@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.kimsoar.EmployeeMapper">
+    <select id="getAll" resultType="map">
+        select * from employee
+    </select>
+
+    <select id="getByName" resultType="Employee">
+        select * from employee where employee_name = #{name}
+    </select>
+</mapper>
