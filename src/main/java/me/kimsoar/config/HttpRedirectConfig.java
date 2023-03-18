@@ -1,4 +1,4 @@
-package me.kimsoar;
+package me.kimsoar.config;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;

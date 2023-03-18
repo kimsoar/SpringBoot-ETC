@@ -1,14 +1,23 @@
 package me.kimsoar;
 
+import me.kimsoar.kafka.JsonKafkaProducer;
+import me.kimsoar.kafka.KafkaProducer;
+import me.kimsoar.mapper.CompanyMapper;
+import me.kimsoar.model.Company;
+import me.kimsoar.model.Employee;
+import me.kimsoar.payload.User;
+import me.kimsoar.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,10 +33,18 @@ public class DemospringsslApplication {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private KafkaProducer kafkaProducer;
+
+	@Autowired
+	private JsonKafkaProducer jsonKafkaProducer;
+
 	@GetMapping({"", "/"})
 	public String hello() {
 		return "Hello Spring";
 	}
+
+	// ********************************* mybatis controller
 
 	@GetMapping("/company")
 	public List<Company> getAllCompany(){
@@ -38,6 +55,9 @@ public class DemospringsslApplication {
 	public Company getById(@PathVariable int id){
 		return companyMapper.getById(id);
 	}
+
+
+	// ********************************* ehcache controller
 
 	@GetMapping("/nocache/{username}")
 	public Employee getNocacheMember(@PathVariable String username) {
@@ -80,8 +100,38 @@ public class DemospringsslApplication {
 		return username + " cache clear!";
 	}
 
+
+	// ********************************* kafka controller
+	// .../kafka/publish?message=hello world
+	@GetMapping("/kafka/publish")
+	public ResponseEntity<String> publish(@RequestParam("message") String message) {
+		kafkaProducer.sendMessage(message);
+		return ResponseEntity.ok("Message sent complete");
+	}
+
+	@PostMapping("/kafka/publish")
+	public ResponseEntity<String> publishJson(@RequestBody User user) {
+		jsonKafkaProducer.sendMessage(user);
+		return ResponseEntity.ok("Json sent complete");
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemospringsslApplication.class, args);
+	}
+
+	@Bean
+	public ApplicationRunner applicationRunner() {
+		return new ApplicationRunner() {
+			@Override
+			public void run(ApplicationArguments args) throws Exception {
+				//log.info("================= ApplicationRunner =================");
+				//User user = new User();
+				//user.setId(1);
+				//user.setFirstName("First");
+				//user.setLastName("Last");
+				//jsonKafkaProducer.sendMessage(user);
+			}
+		};
 	}
 
 }

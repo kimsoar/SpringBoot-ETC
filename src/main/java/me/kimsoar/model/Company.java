@@ -1,4 +1,4 @@
-package me.kimsoar;
+package me.kimsoar.model;
 
 
 import lombok.Data;

@@ -1,5 +1,6 @@
-package me.kimsoar;
+package me.kimsoar.mapper;
 
+import me.kimsoar.model.Employee;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

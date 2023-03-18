@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="me.kimsoar.EmployeeMapper">
+<mapper namespace="me.kimsoar.mapper.EmployeeMapper">
     <select id="getAll" resultType="map">
         select * from employee
     </select>
